@@ -161,6 +161,5 @@ function coverThumbHtml(ficId) {
 
 
 /* ── Init ─────────────────────────────────────────────────── */
-refreshCoverCache().then(() => {
-  if (typeof render === 'function') render();
-});
+/* ── Init ─────────────────────────────────────────────────── */
+refreshCoverCache();

@@ -2,7 +2,7 @@
    GRIMOIRE — sw.js  (cache-busted rebuild)
    ============================================================ */
 
-const CACHE_PREFIX = 'grimoire-2-';   // changed prefix kills ALL old caches
+const CACHE_PREFIX = 'grimoire-3-';   // changed prefix kills ALL old caches
 
 const ASSETS = [
   '/',

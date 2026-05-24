@@ -1,0 +1,568 @@
+/* ============================================================
+   GRIMOIRE v3 — reader.css
+   Full-Screen Reader · Themes · Controls · TOC · Loading
+   ============================================================ */
+
+
+/* ── Reader Root ──────────────────────────────────────────── */
+#reader-root {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: none;
+  flex-direction: column;
+}
+
+
+/* ── Loading Screen ───────────────────────────────────────── */
+.reader-loading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #07050a;
+  gap: 12px;
+}
+
+.reader-loading-rune  { font-size: 48px; animation: reader-pulse 1.5s ease-in-out infinite; }
+.reader-loading-title { font-family: 'Cinzel', serif; font-size: 15px; color: #c9a227; letter-spacing: 1px; text-align: center; padding: 0 20px; }
+.reader-loading-msg   { font-family: 'Crimson Text', serif; font-style: italic; color: #70574a; font-size: 13px; }
+
+@keyframes reader-pulse {
+  0%, 100% { opacity: .4; transform: scale(.95); }
+  50%       { opacity: 1;  transform: scale(1);   }
+}
+
+
+/* ── Reader Wrapper ───────────────────────────────────────── */
+.reader-wrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  transition: background .25s, color .25s;
+}
+
+
+/* ── Themes ───────────────────────────────────────────────── */
+.reader-theme-dark {
+  --r-bg:      #0e0b08;
+  --r-surface: #1a1510;
+  --r-border:  #28201a;
+  --r-text:    #c8b090;
+  --r-dim:     #70574a;
+  --r-accent:  #c9a227;
+  --r-heading: #d4b896;
+}
+
+.reader-theme-sepia {
+  --r-bg:      #f4ead8;
+  --r-surface: #ede0c8;
+  --r-border:  #d0c0a0;
+  --r-text:    #3a2a1a;
+  --r-dim:     #7a6040;
+  --r-accent:  #8a5020;
+  --r-heading: #2a1a0a;
+}
+
+.reader-theme-light {
+  --r-bg:      #fafaf8;
+  --r-surface: #f0f0ec;
+  --r-border:  #d8d8d0;
+  --r-text:    #1a1a18;
+  --r-dim:     #808078;
+  --r-accent:  #5a4010;
+  --r-heading: #0a0a08;
+}
+
+.reader-wrap { background: var(--r-bg); color: var(--r-text); }
+
+
+/* ── Top Bar ──────────────────────────────────────────────── */
+.reader-topbar {
+  display: flex;
+  align-items: center;
+  padding: 12px 14px;
+  padding-top: calc(12px + env(safe-area-inset-top, 0px));
+  background: var(--r-surface);
+  border-bottom: 1px solid var(--r-border);
+  gap: 10px;
+  z-index: 10;
+  transition: transform .25s ease, opacity .25s ease;
+  flex-shrink: 0;
+}
+
+.reader-topbar.hidden {
+  transform: translateY(-100%);
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+}
+
+.reader-back-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  background: none;
+  border: 1px solid var(--r-border);
+  color: var(--r-accent);
+  cursor: pointer;
+  border-radius: 3px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.reader-back-btn:active { background: rgba(0,0,0,.06); }
+
+.reader-fic-title {
+  flex: 1;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: .5px;
+  color: var(--r-heading);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.reader-settings-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 10px;
+  background: none;
+  border: 1px solid var(--r-border);
+  color: var(--r-accent);
+  cursor: pointer;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.reader-settings-btn:active { background: rgba(0,0,0,.06); }
+
+
+/* ── Settings Panel ───────────────────────────────────────── */
+.reader-settings-panel {
+  background: var(--r-surface);
+  border-bottom: 1px solid var(--r-border);
+  padding: 12px 16px;
+  flex-shrink: 0;
+}
+
+.reader-settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.reader-settings-row:last-child { margin-bottom: 0; }
+
+.reader-settings-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--r-dim);
+}
+
+.reader-font-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reader-ctrl-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  padding: 5px 10px;
+  background: none;
+  border: 1px solid var(--r-border);
+  color: var(--r-accent);
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.reader-ctrl-btn:active { background: rgba(0,0,0,.06); }
+
+.reader-font-val {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--r-text);
+  min-width: 36px;
+  text-align: center;
+}
+
+.reader-theme-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.reader-theme-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  background: none;
+  border: 1px solid var(--r-border);
+  color: var(--r-dim);
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.reader-theme-btn.active {
+  border-color: var(--r-accent);
+  color: var(--r-accent);
+  background: rgba(0,0,0,.04);
+}
+
+.reader-theme-btn:active { opacity: .7; }
+
+
+/* ── Scrollable Chapter Content ───────────────────────────── */
+.reader-scroll {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 28px 20px 40px;
+  max-width: 680px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.reader-chapter-title {
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--r-heading);
+  letter-spacing: 1px;
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--r-border);
+  text-align: center;
+}
+
+/* Epub body content */
+.reader-body {
+  font-family: 'Crimson Text', Georgia, serif;
+  line-height: 1.8;
+  color: var(--r-text);
+}
+
+.reader-body p {
+  margin-bottom: 1em;
+  text-align: left;
+}
+
+.reader-body h1,
+.reader-body h2,
+.reader-body h3 {
+  font-family: 'Cinzel', serif;
+  color: var(--r-heading);
+  margin: 1.5em 0 .75em;
+  line-height: 1.3;
+}
+
+.reader-body h1 { font-size: 1.3em; }
+.reader-body h2 { font-size: 1.15em; }
+.reader-body h3 { font-size: 1em; }
+
+.reader-body em, .reader-body i { font-style: italic; }
+.reader-body strong, .reader-body b { color: var(--r-heading); }
+
+.reader-body hr {
+  border: none;
+  border-top: 1px solid var(--r-border);
+  margin: 2em auto;
+  width: 40%;
+}
+
+.reader-body a {
+  color: var(--r-accent);
+  text-decoration: none;
+}
+
+.reader-body blockquote {
+  border-left: 3px solid var(--r-border);
+  margin: 1em 0;
+  padding: 4px 16px;
+  color: var(--r-dim);
+  font-style: italic;
+}
+
+.reader-chapter-end {
+  text-align: center;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--r-dim);
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--r-border);
+}
+
+
+/* ── Bottom Bar ───────────────────────────────────────────── */
+.reader-bottombar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+  background: var(--r-surface);
+  border-top: 1px solid var(--r-border);
+  flex-shrink: 0;
+}
+
+.reader-nav-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  background: none;
+  border: 1px solid var(--r-border);
+  color: var(--r-accent);
+  cursor: pointer;
+  border-radius: 3px;
+  min-width: 70px;
+}
+
+.reader-nav-btn:disabled { color: var(--r-dim); border-color: var(--r-border); opacity: .4; cursor: default; }
+.reader-nav-btn:not(:disabled):active { background: rgba(0,0,0,.06); }
+
+.reader-toc-btn {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: .5px;
+  color: var(--r-text);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 3px;
+}
+
+.reader-toc-btn:active { background: rgba(0,0,0,.06); }
+
+
+/* ── Table of Contents ────────────────────────────────────── */
+.reader-toc-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  background: rgba(0,0,0,.75);
+  display: none;
+  align-items: flex-end;
+}
+
+.reader-toc-panel {
+  background: var(--r-surface);
+  border-top: 2px solid var(--r-accent);
+  border-radius: 12px 12px 0 0;
+  width: 100%;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.reader-toc-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--r-accent);
+  padding: 16px 18px 10px;
+  border-bottom: 1px solid var(--r-border);
+  position: sticky;
+  top: 0;
+  background: var(--r-surface);
+}
+
+.reader-toc-list { padding: 8px 0 12px; }
+
+.reader-toc-item {
+  padding: 11px 18px;
+  font-family: 'Crimson Text', serif;
+  font-size: 14px;
+  color: var(--r-text);
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0,0,0,.04);
+}
+
+.reader-toc-item:active { background: rgba(0,0,0,.05); }
+
+.reader-toc-item.active {
+  color: var(--r-accent);
+  font-weight: 600;
+  background: rgba(0,0,0,.04);
+}
+
+
+/* ── Epub Upload/Read Buttons on Cards ────────────────────── */
+.btn-epub       { border-color: rgba(96,144,80,.45); color: #78b860; }
+.btn-epub:active { background: rgba(96,144,80,.10); }
+
+.btn-epub-read        { border-color: rgba(80,120,200,.45); color: #7090e0; }
+.btn-epub-read:active { background: rgba(80,120,200,.10); }
+
+
+/* ── Highlight Bar ────────────────────────────────────────── */
+.hl-bar {
+  position: fixed;
+  bottom: calc(56px + var(--safe-bot, 0px) + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9500;
+  background: #1a1410;
+  border: 1px solid var(--goldD, #8a6820);
+  border-radius: 24px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+  white-space: nowrap;
+}
+
+.hl-bar-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #8a7a5a;
+  margin-right: 2px;
+}
+
+.hl-color-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: border-color .15s, transform .15s;
+  flex-shrink: 0;
+}
+
+.hl-color-swatch.active {
+  border-color: #d4a820;
+  transform: scale(1.2);
+}
+
+.hl-do-btn {
+  background: var(--goldD, #8a6820);
+  color: #1a1410;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-left: 2px;
+}
+
+.hl-do-btn:active { opacity: 0.7; }
+
+
+/* ── Pull-up hint at chapter end ──────────────────────────── */
+.reader-pull-hint {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--r-dim, #5a5040);
+  margin-top: 10px;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  animation: pulse-hint 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-hint {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.9; }
+}
+
+/* ── Chapter transition flash ─────────────────────────────── */
+.chapter-flash {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(200,160,40,0.18);
+  border: 1px solid rgba(200,160,40,0.4);
+  border-radius: 8px;
+  padding: 10px 24px;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--goldD, #8a6820);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+.chapter-flash.fade-out {
+  opacity: 0;
+  transition: opacity 0.6s ease 0.15s;
+}
+
+
+/* ── Tappable fic title in reader topbar ──────────────────── */
+.reader-title-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
+  text-align: center;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: background .15s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 55vw;
+}
+.reader-title-btn:active { background: rgba(200,160,40,0.12); }
+
+
+/* ── Highlight undo button ────────────────────────────────── */
+.hl-undo-btn {
+  background: rgba(255,255,255,0.07);
+  color: var(--goldD, #8a6820);
+  border: 1px solid rgba(200,160,40,0.25);
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hl-undo-btn:active { opacity: 0.6; }
+
+
+/* ── Reading time estimate ────────────────────────────────── */
+.reader-read-time {
+  display: block;
+  font-size: 11px;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1.5px;
+  color: var(--r-dim, #5a5040);
+  margin-top: 4px;
+  text-transform: uppercase;
+}

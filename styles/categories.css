@@ -1,0 +1,185 @@
+/* ============================================================
+   GRIMOIRE v3 — categories.css
+   Category Filter Bar · Assign Chips · Manage Screen
+   ============================================================ */
+
+
+/* ── Category Filter Bar (shelf top) ─────────────────────── */
+.cat-filter-bar {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 0 10px;
+  margin-bottom: 6px;
+  scrollbar-width: none;
+}
+
+.cat-filter-bar::-webkit-scrollbar { display: none; }
+
+.cat-chip {
+  flex-shrink: 0;
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,.10);
+  color: var(--dim);
+  background: var(--card);
+  transition: background .15s, color .15s, border-color .15s;
+  white-space: nowrap;
+}
+
+/* "All" chip */
+.cat-chip-all { border-color: rgba(255,255,255,.12); }
+
+/* colored chips */
+.cat-chip:not(.cat-chip-all) {
+  border-color: color-mix(in srgb, var(--chip-color) 40%, transparent);
+  color: color-mix(in srgb, var(--chip-color) 80%, var(--text));
+}
+
+/* active states */
+.cat-chip-active.cat-chip-all {
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  border-color: rgba(255,255,255,.20);
+}
+
+.cat-chip-active:not(.cat-chip-all) {
+  background: color-mix(in srgb, var(--chip-color) 18%, transparent);
+  color: var(--chip-color);
+  border-color: color-mix(in srgb, var(--chip-color) 60%, transparent);
+}
+
+
+/* ── Category Assign Row (on each card) ───────────────────── */
+.cat-assign-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin: 8px 0 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.cat-assign-chip {
+  flex-shrink: 0;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--chip-color) 30%, transparent);
+  color: color-mix(in srgb, var(--chip-color) 55%, var(--dim));
+  background: transparent;
+  transition: background .15s, color .15s, border-color .15s;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.cat-assign-chip.cat-assign-on {
+  background: color-mix(in srgb, var(--chip-color) 18%, transparent);
+  color: var(--chip-color);
+  border-color: color-mix(in srgb, var(--chip-color) 55%, transparent);
+}
+
+.cat-assign-chip:active { opacity: .75; }
+
+
+/* ── Manage Categories Screen ─────────────────────────────── */
+.cat-manage-create {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 14px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cat-name-input {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 9px 12px;
+  font-family: 'Crimson Text', serif;
+  font-size: 16px;
+  outline: none;
+  border-radius: 3px;
+  width: 100%;
+  -webkit-appearance: none;
+}
+
+.cat-name-input:focus       { border-color: var(--goldD); }
+.cat-name-input::placeholder { color: var(--dim); font-style: italic; }
+
+.cat-color-picker {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.cat-color-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform .15s, border-color .15s;
+  flex-shrink: 0;
+}
+
+.cat-color-dot.selected { border-color: var(--parchment); transform: scale(1.2); }
+.cat-color-dot:active   { transform: scale(.9); }
+
+.cat-create-btn { width: 100%; justify-content: center; padding: 9px; }
+
+.cat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.cat-manage-row {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cat-color-swatch   { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+.cat-manage-name {
+  flex: 1;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: .5px;
+  color: var(--text);
+}
+
+.cat-rename-input {
+  background: var(--card2);
+  border: 1px solid var(--goldD);
+  color: var(--text);
+  padding: 3px 7px;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  outline: none;
+  border-radius: 2px;
+  width: 100%;
+}
+
+.cat-manage-count   { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: .5px; color: var(--dim); flex-shrink: 0; }
+.cat-manage-actions { display: flex; gap: 5px; flex-shrink: 0; }

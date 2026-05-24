@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#07050a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230e0c09'/%3E%3Cg fill='none' stroke='%23c9a227' stroke-width='24' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M32 380 L32 92 Q32 72 52 72 L220 72 Q252 72 256 100 Q256 100 256 240 Q232 208 184 200 Q112 192 72 208 L72 400 Z'/%3E%3Cpath d='M480 380 L480 92 Q480 72 460 72 L292 72 Q260 72 256 100 Q256 100 256 240 Q280 208 328 200 Q400 192 440 208 L440 400 Z'/%3E%3Cpath d='M72 400 Q256 440 440 400'/%3E%3Cpath d='M256 240 L256 420' stroke-width='16'/%3E%3C/g%3E%3C/svg%3E">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Grimoire">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Grimoire">
+  <title>Grimoire</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <!-- styles -->
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/categories.css">
+  <link rel="stylesheet" href="styles/reader.css">
+  <link rel="stylesheet" href="styles/extras.css">
+</head>
+<body>
+
+  <!-- Hamburger button -->
+  <button class="hamburger" id="hamburger" onclick="openSidebar()">
+    <span></span><span></span><span></span>
+  </button>
+
+  <!-- Sidebar overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+  <!-- Sidebar panel -->
+  <div class="sidebar" id="sidebar">
+
+    <div class="sidebar-header">
+      <div class="sidebar-title" id="sidebar-app-title">Grimoire</div>
+      <div class="sidebar-sub">j.journals · fanfic archive</div>
+      <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+    </div>
+
+    <!-- Navigate -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">🗺 explore</div>
+      <button class="btn btn-dim sidebar-btn sidebar-nav-btn" onclick="goFromSidebar('tags')">🏷 tags</button>
+      <button class="btn btn-dim sidebar-btn sidebar-nav-btn" onclick="goFromSidebar('stats')">📊 stats</button>
+      <button class="btn btn-dim sidebar-btn sidebar-nav-btn" onclick="goFromSidebar('categories')">🗂 lists</button>
+    </div>
+
+    <!-- Stats summary -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">📊 your stats</div>
+      <div class="sidebar-stats" id="sidebar-stats"></div>
+    </div>
+
+    <!-- Settings -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">⚙ settings</div>
+
+      <div class="sidebar-field">
+        <label>app name</label>
+        <input id="set-appname" placeholder="Grimoire">
+      </div>
+
+      <div class="sidebar-field">
+        <label>subtitle</label>
+        <input id="set-subtitle" placeholder="your fanfic archive">
+      </div>
+
+      <div class="sidebar-field">
+        <label>accent color</label>
+        <div class="color-options" id="color-options">
+          <span class="color-chip active" data-color="gold"      style="background:#c9a227" onclick="setAccent('gold')"></span>
+          <span class="color-chip"        data-color="crimson"   style="background:#9b1b30" onclick="setAccent('crimson')"></span>
+          <span class="color-chip"        data-color="slytherin" style="background:#1e5c32" onclick="setAccent('slytherin')"></span>
+          <span class="color-chip"        data-color="raven"     style="background:#1a3468" onclick="setAccent('raven')"></span>
+          <span class="color-chip"        data-color="rose"      style="background:#b05080" onclick="setAccent('rose')"></span>
+          <span class="color-chip"        data-color="teal"      style="background:#1a7a7a" onclick="setAccent('teal')"></span>
+        </div>
+      </div>
+
+      <div class="sidebar-field">
+        <label>reading font</label>
+        <div class="font-options">
+          <span class="font-chip active" data-font="crimson" onclick="setFont('crimson')" style="font-family:'Crimson Text',serif">Crimson</span>
+          <span class="font-chip"        data-font="georgia" onclick="setFont('georgia')" style="font-family:Georgia,serif">Georgia</span>
+          <span class="font-chip"        data-font="system"  onclick="setFont('system')"  style="font-family:system-ui,sans-serif">System</span>
+        </div>
+      </div>
+
+      <button class="btn btn-dim sidebar-btn" onclick="saveSettings()">✔ save settings</button>
+      <div class="sidebar-msg" id="settings-msg"></div>
+    </div>
+
+    <!-- Backup -->
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">💾 backup & restore</div>
+      <div class="sidebar-backup-desc">
+        Export your library as a file. Import it any time on any device to restore everything.
+      </div>
+      <div id="backup-reminder" class="backup-reminder"></div>
+      <div class="backup-row">
+        <button class="btn btn-gold sidebar-btn" onclick="exportData()">⬇ export</button>
+        <button class="btn btn-dim  sidebar-btn" onclick="triggerImport()">⬆ import</button>
+      </div>
+      <div class="backup-row" style="margin-top:6px">
+        <button class="btn btn-dim sidebar-btn" style="width:100%;font-size:10px;letter-spacing:1px" onclick="exportHTML()">📄 export as readable html</button>
+      </div>
+      <div class="backup-msg" id="backup-msg"></div>
+    </div>
+
+  </div>
+
+  <!-- App Shell -->
+  <div id="app">
+    <div id="ptr-indicator">↓ pull to refresh</div>
+    <div id="scrollarea">
+      <div id="content"></div>
+    </div>
+
+    <nav id="bottomnav">
+      <button class="nav-btn active" id="nav-shelf"    onclick="go('shelf')">
+        <span class="nav-ico">📜</span>
+        <span class="nav-lbl">Shelf</span>
+        <div class="nav-pip"></div>
+      </button>
+      <button class="nav-btn" id="nav-reading"         onclick="go('reading')">
+        <span class="nav-ico">📖</span>
+        <span class="nav-lbl">Reading</span>
+        <div class="nav-pip"></div>
+      </button>
+      <button class="nav-btn" id="nav-finished"        onclick="go('finished')">
+        <span class="nav-ico">✅</span>
+        <span class="nav-lbl">Done</span>
+        <div class="nav-pip"></div>
+      </button>
+      <button class="nav-btn" id="nav-all"             onclick="go('all')">
+        <span class="nav-ico">📚</span>
+        <span class="nav-lbl">All</span>
+        <div class="nav-pip"></div>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Floating Action Button -->
+  <button class="fab" id="fab" onclick="openSheet()">✦</button>
+
+  <!-- Scroll to Top Button -->
+  <button class="scroll-top-btn" id="scroll-top-btn" onclick="scrollToTop()" title="back to top">↑</button>
+
+  <!-- Add / Edit Sheet -->
+  <div class="overlay" id="overlay" style="display:none" onclick="overlayClick(event)">
+    <div class="sheet" onclick="event.stopPropagation()">
+
+      <div class="sheet-title" id="sheet-title">✦ add a fic</div>
+
+      <!-- AO3 / FF.net paste box (add mode only) -->
+      <div class="paste-box" id="paste-box">
+        <div class="paste-label">⚡ paste from ao3 or ff.net</div>
+        <div class="paste-hint">
+          <b style="color:var(--parchment)">FF.net:</b> paste the story URL — link saves automatically, fill details manually.<br>
+          <b style="color:var(--parchment)">AO3:</b> paste the URL alone, or copy the full info block from search results to auto-fill everything.
+        </div>
+        <textarea
+          class="paste-area"
+          id="paste-area"
+          placeholder="paste FFN or AO3 URL… or paste an AO3 info block for auto-fill"
+        ></textarea>
+        <button class="parse-btn" onclick="parseSnippet()">⚡ parse fic details</button>
+        <div class="parse-status" id="parse-status"></div>
+        <!-- Quick-add bar: appears after FFN/AO3 URL detected -->
+        <div class="quick-add-bar" id="quick-add-bar" style="display:none">
+          <div class="quick-add-lbl">✦ quick add — just the title needed</div>
+          <div class="quick-add-row">
+            <input id="quick-title" class="quick-title-input" placeholder="fic title…" onkeydown="if(event.key==='Enter'){event.preventDefault();quickAdd();}">
+            <input id="quick-author" class="quick-author-input" placeholder="author (optional)">
+          </div>
+          <button class="quick-add-btn" onclick="quickAdd()">✦ add to grimoire</button>
+        </div>
+      </div>
+
+      <div class="divider" id="paste-divider">or fill manually</div>
+
+      <!-- Manual form -->
+      <div class="form-field">
+        <label>title *</label>
+        <input id="f-title" placeholder="fic title">
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>author</label>
+          <input id="f-author" placeholder="username">
+        </div>
+        <div class="form-field">
+          <label>pairing</label>
+          <input id="f-pairing" placeholder="e.g. Dramione">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>fandom</label>
+          <input id="f-fandom" placeholder="e.g. Harry Potter">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>rating</label>
+          <select id="f-rating">
+            <option value="G">G</option>
+            <option value="T">T</option>
+            <option value="M" selected>M</option>
+            <option value="E">E</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>chapters</label>
+          <input id="f-chapters" placeholder="56/56">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>word count</label>
+          <input id="f-words" type="number" placeholder="353137">
+        </div>
+        <div class="form-field">
+          <label>fic status</label>
+          <select id="f-ficstatus">
+            <option value="complete">complete</option>
+            <option value="ongoing" selected>ongoing</option>
+            <option value="abandoned">abandoned</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label>ao3 / ffn link</label>
+        <input id="f-link" type="url" placeholder="https://...">
+      </div>
+
+      <div class="form-row">
+        <div class="form-field">
+          <label>series name</label>
+          <input id="f-series" type="text" placeholder="e.g. The Untamed Trilogy">
+        </div>
+        <div class="form-field">
+          <label>part #</label>
+          <input id="f-seriesorder" type="number" placeholder="1" min="1" style="width:100%">
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label>tropes / tags</label>
+        <div class="tag-input-wrap" id="tag-input-wrap" onclick="document.getElementById('f-tropes-input').focus()">
+          <div class="tag-chips-live" id="tag-chips-live"></div>
+          <input
+            id="f-tropes-input"
+            class="tag-text-input"
+            placeholder="type a tag then press Enter…"
+            enterkeyhint="done"
+          >
+        </div>
+        <input type="hidden" id="f-tropes">
+      </div>
+
+      <div class="form-field">
+        <label>plot / summary</label>
+        <textarea id="f-plot" class="form-textarea" rows="4" placeholder="what is this fic about? paste the summary or write your own…"></textarea>
+      </div>
+
+      <div class="form-field">
+        <label>your notes</label>
+        <textarea id="f-notes" class="form-textarea" rows="3" placeholder="your personal notes, thoughts, reminders…"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-primary" id="sheet-submit" onclick="submitForm()">✦ add to grimoire</button>
+        <button class="btn-cancel" onclick="closeSheet()">cancel</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Detail Drawer -->
+  <div id="detail-overlay" onclick="closeDetail()"></div>
+
+  <!-- scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="scripts/data.js"></script>
+  <script src="scripts/helpers.js"></script>
+  <script src="scripts/cards.js"></script>
+  <script src="scripts/select.js"></script>
+  <script src="scripts/actions.js"></script>
+  <script src="scripts/form.js"></script>
+  <script src="scripts/render.js"></script>
+  <script src="scripts/epub.js"></script>
+  <script src="scripts/covers.js"></script>
+  <script src="scripts/init.js"></script>
+</body>
+</html>
